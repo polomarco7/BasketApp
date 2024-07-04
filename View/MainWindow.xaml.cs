@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using BasketApp.Models;
+﻿using BasketApp.Models;
 using BasketApp.ViewModel;
 using ShopApp;
+using System.Windows;
 
 namespace BasketApp
 {
@@ -76,6 +75,8 @@ namespace BasketApp
         private void basketListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             Basket b = (Basket)basketListBox.SelectedItem;
+            if (b == null) return;
+            ViewModel.AddProductToBasket(Name = );
         }
     }
 }
