@@ -64,19 +64,25 @@ namespace BasketApp
                 }
                 
             }
+            RefreshListView();
             ViewModel.Baskets.Clear();
         }
 
         private void NewBtn_Click(object sender, RoutedEventArgs e)
         {
             HistList histList = (HistList)historyList.SelectedItem;
+            if (histList == null) return;
+            ViewModel.AddProductToBasket(Name = histList.Name!, histList.ProductId, histList.Price, histList.Count);
         }
 
-        private void basketListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void txtCount_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            Basket b = (Basket)basketListBox.SelectedItem;
-            if (b == null) return;
-            ViewModel.AddProductToBasket(Name = );
+            RefreshListView();
+        }
+
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            RefreshListView();
         }
     }
 }

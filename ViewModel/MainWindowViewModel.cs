@@ -29,9 +29,9 @@ namespace BasketApp.ViewModel
 
         }
 
-        public void AddProductToBasket(string name, int productId)
+        public void AddProductToBasket(string name, int productId, int count = 1, int price = 0)
         {
-            Baskets.Add(new Basket { Name = name, Count = 1, Price = 0, ProductId = productId});
+            Baskets.Add(new Basket { Name = name, Count = count, Price = price, ProductId = productId});
         }
         public void GetProducts()
         {
@@ -54,6 +54,7 @@ namespace BasketApp.ViewModel
                                select new
                                {
                                    Name = product.Name,
+                                   product.Id,
                                    Count = basket.Count,
                                    Price = basket.Price,
                                    TotalAmount = history.TotalAmount,
@@ -62,14 +63,15 @@ namespace BasketApp.ViewModel
                                    HistId = history.Id
                                };
 
-                var g = products.ToList().GroupBy(p => p.HistId).ToList();
+                var g = products.ToList().GroupBy(p => p.BasketId).ToList();
 
                 foreach(var item in g)
                 {
                     var date = item.Key;
                     foreach(var product in item)
                     {
-                        HistList.Add(new HistList { Name = product.Name, Count = product.Count, Price = product.Price, Date = product.Date, TotalAmount = product.TotalAmount });
+                        HistList.Add(new HistList { Name = product.Name,ProductId = product.Id, Count = product.Count, Price = product.Price, Date = product.Date,
+                            TotalAmount = product.TotalAmount });
                     }
                     
                 }
