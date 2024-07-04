@@ -1,0 +1,204 @@
+﻿<Window x:Class="BasketApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BasketApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Name="UI"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <CollectionViewSource Source="{Binding HistList}" x:Key="cvs">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Date"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+    </Window.Resources>
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Grid.Column="0" Grid.Row="0">
+            <TextBlock
+                Text="Товары"/>
+            <Button
+                x:Name="openDirectoryBtn"
+                Margin="15 0 0 0"
+                Background="Blue"
+                Height="15" 
+                Width="15"
+                Click="Button_Click"/>
+        </StackPanel>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="Покупка"
+                 HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="0" Text="История"
+                 HorizontalAlignment="Center"/>
+        <ListBox ItemsSource="{Binding Products}"
+            Grid.Column="0" Grid.Row="1"
+            Name="productListBox"
+            DisplayMemberPath="Name"
+            Margin="2">
+        </ListBox>
+        <Button x:Name="addToBasketBtn" Content="Добавить в покупку"
+                Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center"
+                Margin="6" Height="30" Click="addToBasketBtn_Click"/>
+        <Border BorderBrush="Gray" BorderThickness="1" 
+                Grid.Column="1" Grid.Row="1" Margin="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                    Margin="4">
+                    <Label Name="lblDate"
+                       Content="Дата:"/>
+                    <TextBlock 
+                    x:Name="txtDate"
+                    TextAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text=""/>
+                </StackPanel>
+                <ListBox x:Name="basketListBox"
+                         ItemsSource="{Binding Baskets}"
+                         SelectionChanged="basketListBox_SelectionChanged"
+                         HorizontalContentAlignment="Stretch"
+                         BorderBrush="Transparent"
+                         Margin="4"
+                         Grid.Row="1">                    
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="1" BorderBrush="Black">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+                                            Height="*"/>
+                                        <RowDefinition
+                                            Height="*"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Orientation="Horizontal"
+                                            Grid.Row="0"
+                                            Margin="6">
+                                        <TextBlock Text="{Binding Name}"
+                                             VerticalAlignment="Center"/>
+                                        <TextBox x:Name="txtCount"
+                                            Text="{Binding Count}"
+                                                 Margin="6 0 0 0"
+                                             VerticalContentAlignment="Center"/>
+                                        <Label Content="шт"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                            Grid.Row="1"
+                                            Margin="6">
+                                        <Label Content="Цена"
+                             VerticalContentAlignment="Center"/>
+                                        <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"
+                                                 Margin="6 0 0 0"
+                             VerticalContentAlignment="Center"/>
+                                        <Label Content="руб"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                                Margin="0 0 6 6">
+                                        <Label Content="Общее"
+                             VerticalContentAlignment="Center"/>
+                                        <TextBlock x:Name="txtTotalPrice" Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"/>
+                                        <Label Content="руб"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+            <Button x:Name="resetBtn" Content="Сбросить" Click="ResetBtn_Click"
+                    Height="30" Width="80" Margin="0 0 10 0"/>
+            <Button x:Name="saveBtn" Content="Сохранить" Click="SaveBtn_Click"
+                    Width="80"/>
+        </StackPanel>
+        <ListBox ItemsSource="{Binding HistList}"
+            x:Name="historyList"
+            Grid.Column="2" Grid.Row="1"
+            HorizontalContentAlignment="Stretch"
+            Margin="2">
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" Margin="6"/>
+                                                <ItemsPresenter />
+                                            </StackPanel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                            Height="Auto"/>
+                            <RowDefinition
+                            Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"
+                                    VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Count}"
+                                    VerticalAlignment="Center"
+                                    Margin="5 0 0 0"/>
+                            <Label Content="шт"/>
+                            <TextBlock Text="{Binding Price}" VerticalAlignment="Center"/>
+                            <Label Content="руб"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                            <Label Content="Общее"/>
+                            <TextBlock Text="{Binding TotalAmount}"
+                                    VerticalAlignment="Center"/>
+                            <Label Content="руб"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button x:Name="newBtn" Content="Новая"
+                Grid.Column="2" Grid.Row="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Width="80" Height="30"  Click="NewBtn_Click"/>
+    </Grid>
+</Window>
